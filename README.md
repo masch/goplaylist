@@ -1,10 +1,10 @@
 # Go Repository Template
 
-[![GitHub Release](https://img.shields.io/github/v/release/golang-templates/seed)](https://github.com/golang-templates/seed/releases)
-[![go.dev](https://img.shields.io/badge/go.dev-reference-blue.svg)](https://pkg.go.dev/github.com/golang-templates/seed)
-[![go.mod](https://img.shields.io/github/go-mod/go-version/golang-templates/seed)](go.mod)
-[![Build Status](https://img.shields.io/github/workflow/status/golang-templates/seed/build)](https://github.com/golang-templates/seed/actions?query=workflow%3Abuild+branch%3Amaster)
-[![Go Report Card](https://goreportcard.com/badge/github.com/golang-templates/seed)](https://goreportcard.com/report/github.com/golang-templates/seed)
+[![GitHub Release](https://img.shields.io/github/v/release/github.com/masch/goplaylist)](https://github.com/masch/goplaylist/releases)
+[![go.dev](https://img.shields.io/badge/go.dev-reference-blue.svg)](https://pkg.go.dev/github.com/masch/goplaylist)
+[![go.mod](https://img.shields.io/github/go-mod/go-version/github.com/masch/goplaylist)](go.mod)
+[![Build Status](https://img.shields.io/github/workflow/status/github.com/masch/goplaylist/build)](https://github.com/masch/goplaylist/actions?query=workflow%3Abuild+branch%3Amaster)
+[![Go Report Card](https://goreportcard.com/badge/github.com/masch/goplaylist)](https://goreportcard.com/report/github.com/masch/goplaylist)
 
 This is a GitHub repository template for Go. It has been created for ease-of-use for anyone who wants to:
 
@@ -27,7 +27,7 @@ It includes:
 ## Usage
 
 1. Click the `Use this template` button (alt. clone or download this repository).
-1. Replace all occurences of `golang-templates/seed` to `your_org/repo_name` in all files.
+1. Replace all occurences of `github.com/masch/goplaylist` to `your_org/repo_name` in all files.
 1. Rename folder `cmd/seed` to `cmd/repo_name` and update [.goreleaser.yml](.goreleaser.yml).
 1. Update [LICENSE](LICENSE) and [README.md](README.md).
 
