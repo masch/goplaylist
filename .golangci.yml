@@ -1,6 +1,6 @@
 linters-settings:
   goimports:
-    local-prefixes: github.com/golang-templates/seed
+    local-prefixes: github.com/masch/goplaylist
   golint:
     min-confidence: 0
   misspell:

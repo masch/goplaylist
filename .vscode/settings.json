@@ -10,6 +10,6 @@
     "go.formatTool": "goimports",
     "go.formatFlags": [
         "-local",
-        "github.com/golang-templates/seed"
+        "github.com/masch/goplaylist"
     ]
 }

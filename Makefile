@@ -33,7 +33,7 @@ build: ## go build
 .PHONY: fmt
 fmt: ## goimports
 	$(call print-target)
-	goimports -l -w -local github.com/golang-templates/seed . || true
+	goimports -l -w -local github.com/masch/goplaylist . || true
 
 .PHONY: lint
 lint: ## golangci-lint
