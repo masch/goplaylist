@@ -42,7 +42,7 @@ It includes:
 In order to install:
 
 ```bash
-curl -sSfL https://raw.githubusercontent.com/github.com/masch/goplaylist/master/install.sh | sh -s -- -b /usr/local/bin
+curl -sSfL https://raw.githubusercontent.com/masch/goplaylist/master/install.sh | sh -s -- -b /usr/local/bin
 ```
 
 ## Release
