@@ -37,6 +37,14 @@ It includes:
 - Terminal: `make all` to execute a full build.
 - Visual Studio Code: `Terminal` → `Run Build Task... (CTRL+ALT+B)` to execute a fast build.
 
+## Install
+
+In order to install:
+
+```bash
+curl -sSfL https://raw.githubusercontent.com/github.com/masch/goplaylist/master/install.sh | sh -s -- -b /usr/local/bin
+```
+
 ## Release
 
 The release workflow is triggered each time a tag with `v` prefix is pushed.
