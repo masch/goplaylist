@@ -5,6 +5,7 @@
 [![go.mod](https://img.shields.io/github/go-mod/go-version/masch/goplaylist)](go.mod)
 [![Build Status](https://img.shields.io/github/workflow/status/masch/goplaylist/build)](https://github.com/masch/goplaylist/actions?query=workflow%3Abuild+branch%3Amaster)
 [![Go Report Card](https://goreportcard.com/badge/github.com/masch/goplaylist)](https://goreportcard.com/report/github.com/masch/goplaylist)
+[![codecov](https://codecov.io/gh/masch/goplaylist/branch/master/graph/badge.svg)](https://codecov.io/gh/masch/goplaylist)
 
 This is a GitHub repository template for Go. It has been created for ease-of-use for anyone who wants to:
 
