@@ -54,24 +54,33 @@ func writeOutput(fileList []string) error {
 }
 
 var (
+	errSortModeIsEmpty          = errors.New("sort mode is empty")
 	errPathOriginIsEmpty        = errors.New("path origin is empty")
 	errCountFilesIsEmpty        = errors.New("count files is empty")
 	errFilterExtensionsAreEmpty = errors.New("filter extensions are empty")
+	errUnknownFileSortMode      = errors.New("unknown file sort mode")
 )
 
 // LoadFiles load files list from the command line using command line flags.
 func LoadFiles() ([]string, error) {
 	// parse flags values from command line
 	var (
-		path       string
-		countFiles int
-		extensions arrayFlags
+		sortModeRaw string
+		path        string
+		countFiles  int
+		extensions  arrayFlags
 	)
 
+	flag.StringVar(&path, "short_mode", "",
+		"Specify sort ascendant mode to list the files: name or timestamp_creation are supported")
 	flag.StringVar(&path, "path", "", "Specify path to load file list")
 	flag.IntVar(&countFiles, "count", 0, "Specify file count to load from path")
 	flag.Var(&extensions, "extension", "Specify extensions")
 	flag.Parse()
+
+	if sortModeRaw == "" {
+		return nil, errSortModeIsEmpty
+	}
 
 	if path == "" {
 		return nil, errPathOriginIsEmpty
@@ -85,7 +94,18 @@ func LoadFiles() ([]string, error) {
 		return nil, errFilterExtensionsAreEmpty
 	}
 
-	fileList, err := playlist.GetNextFilesFromPath(path, countFiles, extensions)
+	var sortMode playlist.FileSortMode
+
+	switch sortModeRaw {
+	case "name":
+		sortMode = playlist.FileSortModeFileNameAsc
+	case "timestamp_creation":
+		sortMode = playlist.FileSortModeTimestampCreationAsc
+	default:
+		return nil, errUnknownFileSortMode
+	}
+
+	fileList, err := playlist.GetNextFilesFromPath(path, countFiles, extensions, sortMode)
 	if err != nil {
 		return nil, err
 	}
