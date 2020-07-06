@@ -12,6 +12,14 @@ import (
 	"github.com/masch/goplaylist/internal/playlist"
 )
 
+var (
+	errSortModeIsEmpty          = errors.New("sort_mode is empty")
+	errPathOriginIsEmpty        = errors.New("path origin is empty")
+	errCountFilesIsEmpty        = errors.New("count files is empty")
+	errFilterExtensionsAreEmpty = errors.New("filter extensions are empty")
+	errUnknownFileSortMode      = errors.New("unknown file sort mode")
+)
+
 type playlister interface {
 	GetNextFilesFromPath(path string, count int, fileExtension []string, sortMode playlist.FileSortMode) ([]string, error)
 }
@@ -29,15 +37,18 @@ func (i *arrayFlags) Set(value string) error {
 }
 
 func main() {
-	// Load file list to process
-	fileList, err := GetNextFilesFromPath(os.Args[1:], &playlist.Playlist{})
-	if err != nil {
+	if err := run(os.Args[1:], &playlist.Playlist{}); err != nil {
 		log.Fatal(err)
+	}
+}
+
+func run(args []string, playlistClient playlister) error {
+	fileList, err := GetNextFilesFromPath(args, playlistClient)
+	if err != nil {
+		return err
 	}
 
-	if err := writeOutput(fileList); err != nil {
-		log.Fatal(err)
-	}
+	return writeOutput(fileList)
 }
 
 func writeOutput(fileList []string) error {
@@ -51,27 +62,13 @@ func writeOutput(fileList []string) error {
 	}
 
 	// Flush std out
-	if err := writer.Flush(); err != nil {
-		return err
-	}
-
-	return nil
+	return writer.Flush()
 }
-
-var (
-	errSortModeIsEmpty          = errors.New("sort_mode is empty")
-	errPathOriginIsEmpty        = errors.New("path origin is empty")
-	errCountFilesIsEmpty        = errors.New("count files is empty")
-	errFilterExtensionsAreEmpty = errors.New("filter extensions are empty")
-	errUnknownFileSortMode      = errors.New("unknown file sort mode")
-)
 
 // GetNextFilesFromPath get next files list from the command line using command line flags.
 func GetNextFilesFromPath(args []string, playlistClient playlister) ([]string, error) {
 	// parse flags values from command line
-	var (
-		extensions arrayFlags
-	)
+	var extensions arrayFlags
 
 	setFlags := flag.NewFlagSet("goplaylist", flag.ContinueOnError)
 	sortModeRaw := setFlags.String("short_mode", "",
