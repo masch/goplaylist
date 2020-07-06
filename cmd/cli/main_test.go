@@ -12,17 +12,13 @@ import (
 )
 
 var (
-	errProxy = errors.New("proxy error")
+	errProxy                 = errors.New("proxy error")
+	errUndefinedFlagProvided = errors.New("flag provided but not defined: -undefined-flag")
 )
 
 type (
 	input struct {
 		args []string
-	}
-
-	expect struct {
-		fileList []string
-		err      error
 	}
 
 	reqProxy struct {
@@ -41,19 +37,121 @@ type (
 		req reqProxy
 		res resProxy
 	}
-
-	suite struct {
-		name   string
-		input  input
-		expect expect
-	}
 )
 
-func TestGetNextFilesFromPath(t *testing.T) { //nolint // function tool large because of BDD mechanism
+func TestRun(t *testing.T) { //nolint // function tool large because of BDD mechanism
+	type (
+		expect struct {
+			err error
+		}
+
+		suite struct {
+			name   string
+			input  input
+			expect expect
+		}
+	)
+
 	tt := []struct {
 		suite suite
 		proxy dependencyProxy
 	}{
+		{
+			suite: suite{
+				name: "FAIL_from_proxy",
+				input: input{
+					args: []string{"-short_mode", "name", "-path", "2", "-count", "1", "-extension", ".ext"},
+				},
+				expect: expect{
+					err: errProxy,
+				},
+			},
+			proxy: dependencyProxy{
+				req: reqProxy{
+					path:          "2",
+					count:         1,
+					fileExtension: []string{".ext"},
+					sortMode:      playlist.FileSortModeFileNameAsc,
+				},
+				res: resProxy{
+					fileList: nil,
+					err:      errProxy,
+				},
+			},
+		},
+		{
+			suite: suite{
+				name: "OK_with_file_timestamp_creation_sort_mode",
+				input: input{
+					args: []string{"-short_mode", "timestamp_creation", "-path", "2", "-count", "1", "-extension", ".ext"},
+				},
+				expect: expect{
+					err: nil,
+				},
+			},
+			proxy: dependencyProxy{
+				req: reqProxy{
+					path:          "2",
+					count:         1,
+					fileExtension: []string{".ext"},
+					sortMode:      playlist.FileSortModeTimestampCreationAsc,
+				},
+				res: resProxy{
+					fileList: []string{"file_1", "file_2", "file_3"},
+					err:      nil,
+				},
+			},
+		},
+	}
+
+	for _, tc := range tt {
+		tc := tc
+		t.Run(tc.suite.name, func(t *testing.T) {
+			playlisterMock := playlisterMock{}
+			playlisterMock.Test(t)
+
+			playlisterMock.On("GetNextFilesFromPath",
+				tc.proxy.req.path, tc.proxy.req.count, tc.proxy.req.fileExtension, tc.proxy.req.sortMode).
+				Return(tc.proxy.res.fileList, tc.proxy.res.err)
+
+			err := run(tc.suite.input.args, &playlisterMock)
+
+			require.EqualValues(t, tc.suite.expect.err, err)
+		})
+	}
+}
+
+func TestGetNextFilesFromPath(t *testing.T) { //nolint // function tool large because of BDD mechanism
+	type (
+		expect struct {
+			fileList []string
+			err      error
+		}
+
+		suite struct {
+			name   string
+			input  input
+			expect expect
+		}
+	)
+
+	tt := []struct {
+		suite suite
+		proxy dependencyProxy
+	}{
+		{
+			suite: suite{
+				name: "FAIL_Without_sort_mode_argument",
+				input: input{
+					args: []string{"--undefined-flag"},
+				},
+				expect: expect{
+					fileList: nil,
+					err:      errUndefinedFlagProvided,
+				},
+			},
+			proxy: dependencyProxy{},
+		},
 		{
 			suite: suite{
 				name: "FAIL_Without_sort_mode_argument",
@@ -145,7 +243,7 @@ func TestGetNextFilesFromPath(t *testing.T) { //nolint // function tool large be
 		},
 		{
 			suite: suite{
-				name: "OK",
+				name: "OK_with_file_name_sort_mode",
 				input: input{
 					args: []string{"-short_mode", "name", "-path", "2", "-count", "1", "-extension", ".ext"},
 				},
@@ -160,6 +258,30 @@ func TestGetNextFilesFromPath(t *testing.T) { //nolint // function tool large be
 					count:         1,
 					fileExtension: []string{".ext"},
 					sortMode:      playlist.FileSortModeFileNameAsc,
+				},
+				res: resProxy{
+					fileList: []string{"file_1", "file_2", "file_3"},
+					err:      nil,
+				},
+			},
+		},
+		{
+			suite: suite{
+				name: "OK_with_file_timestamp_creation_sort_mode",
+				input: input{
+					args: []string{"-short_mode", "timestamp_creation", "-path", "2", "-count", "1", "-extension", ".ext"},
+				},
+				expect: expect{
+					fileList: []string{"file_1", "file_2", "file_3"},
+					err:      nil,
+				},
+			},
+			proxy: dependencyProxy{
+				req: reqProxy{
+					path:          "2",
+					count:         1,
+					fileExtension: []string{".ext"},
+					sortMode:      playlist.FileSortModeTimestampCreationAsc,
 				},
 				res: resProxy{
 					fileList: []string{"file_1", "file_2", "file_3"},
