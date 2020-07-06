@@ -24,6 +24,11 @@ type playlister interface {
 	GetNextFilesFromPath(path string, count int, fileExtension []string, sortMode playlist.FileSortMode) ([]string, error)
 }
 
+type writer interface {
+	WriteString(s string) (int, error)
+	Flush() error
+}
+
 // arrayFlags defines custom flags to support array flags values.
 type arrayFlags []string
 
@@ -36,32 +41,30 @@ func (i *arrayFlags) Set(value string) error {
 	return nil
 }
 
+var logFatal = log.Fatal //nolint // global used in order to test main result error
+
 func main() {
-	if err := run(os.Args[1:], &playlist.Playlist{}); err != nil {
-		log.Fatal(err)
+	if err := run(os.Args[1:], &playlist.Playlist{}, bufio.NewWriter(os.Stdout)); err != nil {
+		logFatal(err)
 	}
 }
 
-func run(args []string, playlistClient playlister) error {
+func run(args []string, playlistClient playlister, playlistOutput writer) error {
 	fileList, err := GetNextFilesFromPath(args, playlistClient)
 	if err != nil {
 		return err
 	}
 
-	return writeOutput(fileList)
+	return writeOutput(fileList, playlistOutput)
 }
 
-func writeOutput(fileList []string) error {
-	// Write the result on the std output
-	writer := bufio.NewWriter(os.Stdout)
-
+func writeOutput(fileList []string, writer writer) error {
 	for _, file := range fileList {
 		if _, err := writer.WriteString(file + " "); err != nil {
 			return err
 		}
 	}
 
-	// Flush std out
 	return writer.Flush()
 }
 
