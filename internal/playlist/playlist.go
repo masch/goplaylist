@@ -32,6 +32,10 @@ var (
 	ErrUnsupportedFileSortMode = fmt.Errorf("unsupported file sort mode")
 )
 
+// Playlist contains the mechanism to list file names.
+type Playlist struct {
+}
+
 // GetNextFilesFromPath returns existing files names on the path given following the next steps:
 // 1. List file names by the sort mode given and filter them by the extension given.
 // 2. Load from the ini configuration file which was the last file name processed.
@@ -39,7 +43,8 @@ var (
 // 3. Get next N count value given file from the last file name processed.
 // 4. Save the last file name returned on the filter list.
 // 5. Return the full list to processed.
-func GetNextFilesFromPath(path string, count int, fileExtension []string, sortMode FileSortMode) ([]string, error) {
+func (*Playlist) GetNextFilesFromPath(
+	path string, count int, fileExtension []string, sortMode FileSortMode) ([]string, error) {
 	var (
 		fileList []string
 		err      error

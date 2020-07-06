@@ -102,7 +102,8 @@ func TestGetNextFiles(t *testing.T) {
 }
 
 func TestPlaylistSortByUnknownMode(t *testing.T) {
-	got, err := playlist.GetNextFilesFromPath("testdata/example_1", 3, []string{".ext"}, 100000)
+	client := playlist.Playlist{}
+	got, err := client.GetNextFilesFromPath("testdata/example_1", 3, []string{".ext"}, 100000)
 	require.EqualValues(t, fmt.Errorf("%w: %d", playlist.ErrUnsupportedFileSortMode, 100000), err)
 	require.Empty(t, got)
 }
@@ -121,7 +122,8 @@ func testPlaylistSortByFileNameAscFunctional(t *testing.T) {
 		require.NoError(t, os.Remove("cfg.ini"))
 	}()
 
-	got, err := playlist.GetNextFilesFromPath("testdata/example_1", 3, []string{".ext"}, playlist.FileSortModeFileNameAsc)
+	client := playlist.Playlist{}
+	got, err := client.GetNextFilesFromPath("testdata/example_1", 3, []string{".ext"}, playlist.FileSortModeFileNameAsc)
 	require.NoError(t, err)
 	require.EqualValues(t, []string{
 		"testdata/example_1/dir_1/file_1_1.ext",
@@ -129,7 +131,7 @@ func testPlaylistSortByFileNameAscFunctional(t *testing.T) {
 		"testdata/example_1/dir_1/file_1_3.ext",
 	}, got)
 
-	got, err = playlist.GetNextFilesFromPath("testdata/example_1", 3, []string{".ext"}, playlist.FileSortModeFileNameAsc)
+	got, err = client.GetNextFilesFromPath("testdata/example_1", 3, []string{".ext"}, playlist.FileSortModeFileNameAsc)
 	require.NoError(t, err)
 	require.EqualValues(t, []string{
 		"testdata/example_1/dir_2/file_2_1.ext",
@@ -137,7 +139,7 @@ func testPlaylistSortByFileNameAscFunctional(t *testing.T) {
 		"testdata/example_1/dir_3/file_3_1.ext",
 	}, got)
 
-	got, err = playlist.GetNextFilesFromPath("testdata/example_1", 3, []string{".ext"}, playlist.FileSortModeFileNameAsc)
+	got, err = client.GetNextFilesFromPath("testdata/example_1", 3, []string{".ext"}, playlist.FileSortModeFileNameAsc)
 	require.NoError(t, err)
 	require.EqualValues(t, []string{
 		"testdata/example_1/dir_3/file_3_2.ext",
@@ -145,7 +147,7 @@ func testPlaylistSortByFileNameAscFunctional(t *testing.T) {
 
 	var emptyList []string
 
-	got, err = playlist.GetNextFilesFromPath("testdata/example_1", 3, []string{".ext"}, playlist.FileSortModeFileNameAsc)
+	got, err = client.GetNextFilesFromPath("testdata/example_1", 3, []string{".ext"}, playlist.FileSortModeFileNameAsc)
 	require.NoError(t, err)
 	require.EqualValues(t, emptyList, got)
 }
@@ -165,14 +167,16 @@ func testPlaylistSortByFileTimestampCreationAscFunctional(t *testing.T) {
 	defer clearFunc()
 
 	const shortMode playlist.FileSortMode = playlist.FileSortModeTimestampCreationAsc
-	got, err := playlist.GetNextFilesFromPath(exampleDirectoryPath, 2, []string{".ext", ".ext2"}, shortMode)
+
+	client := playlist.Playlist{}
+	got, err := client.GetNextFilesFromPath(exampleDirectoryPath, 2, []string{".ext", ".ext2"}, shortMode)
 	require.NoError(t, err)
 	require.EqualValues(t, []string{
 		"testdata/example_file_creation_short/" + testCaseName + "/00_4.ext",
 		"testdata/example_file_creation_short/" + testCaseName + "/00_2.ext",
 	}, got)
 
-	got, err = playlist.GetNextFilesFromPath(exampleDirectoryPath, 2, []string{".ext", ".ext2"}, shortMode)
+	got, err = client.GetNextFilesFromPath(exampleDirectoryPath, 2, []string{".ext", ".ext2"}, shortMode)
 	require.NoError(t, err)
 	require.EqualValues(t, []string{
 		"testdata/example_file_creation_short/" + testCaseName + "/00_1.ext",
@@ -181,7 +185,7 @@ func testPlaylistSortByFileTimestampCreationAscFunctional(t *testing.T) {
 
 	var emptyList []string
 
-	got, err = playlist.GetNextFilesFromPath(exampleDirectoryPath, 2, []string{".ext", ".ext2"}, shortMode)
+	got, err = client.GetNextFilesFromPath(exampleDirectoryPath, 2, []string{".ext", ".ext2"}, shortMode)
 	require.NoError(t, err)
 	require.EqualValues(t, emptyList, got)
 }
