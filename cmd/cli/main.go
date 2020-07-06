@@ -5,11 +5,16 @@ import (
 	"bufio"
 	"errors"
 	"flag"
+	"fmt"
 	"log"
 	"os"
 
 	"github.com/masch/goplaylist/internal/playlist"
 )
+
+type playlister interface {
+	GetNextFilesFromPath(path string, count int, fileExtension []string, sortMode playlist.FileSortMode) ([]string, error)
+}
 
 // arrayFlags defines custom flags to support array flags values.
 type arrayFlags []string
@@ -25,7 +30,7 @@ func (i *arrayFlags) Set(value string) error {
 
 func main() {
 	// Load file list to process
-	fileList, err := LoadFiles()
+	fileList, err := GetNextFilesFromPath(os.Args[1:], &playlist.Playlist{})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -54,39 +59,40 @@ func writeOutput(fileList []string) error {
 }
 
 var (
-	errSortModeIsEmpty          = errors.New("sort mode is empty")
+	errSortModeIsEmpty          = errors.New("sort_mode is empty")
 	errPathOriginIsEmpty        = errors.New("path origin is empty")
 	errCountFilesIsEmpty        = errors.New("count files is empty")
 	errFilterExtensionsAreEmpty = errors.New("filter extensions are empty")
 	errUnknownFileSortMode      = errors.New("unknown file sort mode")
 )
 
-// LoadFiles load files list from the command line using command line flags.
-func LoadFiles() ([]string, error) {
+// GetNextFilesFromPath get next files list from the command line using command line flags.
+func GetNextFilesFromPath(args []string, playlistClient playlister) ([]string, error) {
 	// parse flags values from command line
 	var (
-		sortModeRaw string
-		path        string
-		countFiles  int
-		extensions  arrayFlags
+		extensions arrayFlags
 	)
 
-	flag.StringVar(&path, "short_mode", "",
+	setFlags := flag.NewFlagSet("goplaylist", flag.ContinueOnError)
+	sortModeRaw := setFlags.String("short_mode", "",
 		"Specify sort ascendant mode to list the files: name or timestamp_creation are supported")
-	flag.StringVar(&path, "path", "", "Specify path to load file list")
-	flag.IntVar(&countFiles, "count", 0, "Specify file count to load from path")
-	flag.Var(&extensions, "extension", "Specify extensions")
-	flag.Parse()
+	path := setFlags.String("path", "", "Specify path to load file list")
+	countFiles := setFlags.Int("count", 0, "Specify file count to load from path")
+	setFlags.Var(&extensions, "extension", "Specify extensions")
 
-	if sortModeRaw == "" {
+	if err := setFlags.Parse(args); err != nil {
+		return nil, err
+	}
+
+	if *sortModeRaw == "" {
 		return nil, errSortModeIsEmpty
 	}
 
-	if path == "" {
+	if *path == "" {
 		return nil, errPathOriginIsEmpty
 	}
 
-	if countFiles == 0 {
+	if *countFiles == 0 {
 		return nil, errCountFilesIsEmpty
 	}
 
@@ -96,16 +102,16 @@ func LoadFiles() ([]string, error) {
 
 	var sortMode playlist.FileSortMode
 
-	switch sortModeRaw {
+	switch *sortModeRaw {
 	case "name":
 		sortMode = playlist.FileSortModeFileNameAsc
 	case "timestamp_creation":
 		sortMode = playlist.FileSortModeTimestampCreationAsc
 	default:
-		return nil, errUnknownFileSortMode
+		return nil, fmt.Errorf("%w: %s", errUnknownFileSortMode, *sortModeRaw)
 	}
 
-	fileList, err := playlist.GetNextFilesFromPath(path, countFiles, extensions, sortMode)
+	fileList, err := playlistClient.GetNextFilesFromPath(*path, *countFiles, extensions, sortMode)
 	if err != nil {
 		return nil, err
 	}
