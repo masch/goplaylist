@@ -50,10 +50,10 @@ func TestListFilesByTimestampCreationAscSort(t *testing.T) {
 	got, err := playlist.ListFilesByDateCreation(exampleDirectoryPath, []string{".ext", ".ext2"})
 	require.NoError(t, err)
 	require.EqualValues(t, []string{
-		"testdata/example_file_creation_short/" + testCaseName + "/00_4.ext",
-		"testdata/example_file_creation_short/" + testCaseName + "/00_2.ext",
-		"testdata/example_file_creation_short/" + testCaseName + "/00_1.ext",
-		"testdata/example_file_creation_short/" + testCaseName + "/00_3.ext2",
+		"testdata/example_file_creation_sort/" + testCaseName + "/00_4.ext",
+		"testdata/example_file_creation_sort/" + testCaseName + "/00_2.ext",
+		"testdata/example_file_creation_sort/" + testCaseName + "/00_1.ext",
+		"testdata/example_file_creation_sort/" + testCaseName + "/00_3.ext2",
 	}, got)
 }
 
@@ -166,32 +166,32 @@ func testPlaylistSortByFileTimestampCreationAscFunctional(t *testing.T) {
 
 	defer clearFunc()
 
-	const shortMode playlist.FileSortMode = playlist.FileSortModeTimestampCreationAsc
+	const sortMode playlist.FileSortMode = playlist.FileSortModeTimestampCreationAsc
 
 	client := playlist.Playlist{}
-	got, err := client.GetNextFilesFromPath(exampleDirectoryPath, 2, []string{".ext", ".ext2"}, shortMode)
+	got, err := client.GetNextFilesFromPath(exampleDirectoryPath, 2, []string{".ext", ".ext2"}, sortMode)
 	require.NoError(t, err)
 	require.EqualValues(t, []string{
-		"testdata/example_file_creation_short/" + testCaseName + "/00_4.ext",
-		"testdata/example_file_creation_short/" + testCaseName + "/00_2.ext",
+		"testdata/example_file_creation_sort/" + testCaseName + "/00_4.ext",
+		"testdata/example_file_creation_sort/" + testCaseName + "/00_2.ext",
 	}, got)
 
-	got, err = client.GetNextFilesFromPath(exampleDirectoryPath, 2, []string{".ext", ".ext2"}, shortMode)
+	got, err = client.GetNextFilesFromPath(exampleDirectoryPath, 2, []string{".ext", ".ext2"}, sortMode)
 	require.NoError(t, err)
 	require.EqualValues(t, []string{
-		"testdata/example_file_creation_short/" + testCaseName + "/00_1.ext",
-		"testdata/example_file_creation_short/" + testCaseName + "/00_3.ext2",
+		"testdata/example_file_creation_sort/" + testCaseName + "/00_1.ext",
+		"testdata/example_file_creation_sort/" + testCaseName + "/00_3.ext2",
 	}, got)
 
 	var emptyList []string
 
-	got, err = client.GetNextFilesFromPath(exampleDirectoryPath, 2, []string{".ext", ".ext2"}, shortMode)
+	got, err = client.GetNextFilesFromPath(exampleDirectoryPath, 2, []string{".ext", ".ext2"}, sortMode)
 	require.NoError(t, err)
 	require.EqualValues(t, emptyList, got)
 }
 
 func createFileTimestampCreationShortTestDataExample(t *testing.T, testCaseName string) (string, func()) {
-	exampleDirectoryPath := filepath.Join("./testdata/example_file_creation_short", testCaseName)
+	exampleDirectoryPath := filepath.Join("./testdata/example_file_creation_sort", testCaseName)
 	// Ensure there is no  example directory path on the bootstrap and when the test finish
 	// If the file doesn't exist, the error is ignored
 	_ = os.RemoveAll(exampleDirectoryPath)
