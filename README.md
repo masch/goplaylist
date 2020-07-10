@@ -1,4 +1,4 @@
-# Go Repository Template
+# Goplaylist 
 
 [![GitHub Release](https://img.shields.io/github/v/release/masch/goplaylist)](https://github.com/masch/goplaylist/releases)
 [![go.dev](https://img.shields.io/badge/go.dev-reference-blue.svg)](https://pkg.go.dev/github.com/masch/goplaylist)
@@ -6,121 +6,43 @@
 [![Build Status](https://img.shields.io/github/workflow/status/masch/goplaylist/build)](https://github.com/masch/goplaylist/actions?query=workflow%3Abuild+branch%3Amaster)
 [![Go Report Card](https://goreportcard.com/badge/github.com/masch/goplaylist)](https://goreportcard.com/report/github.com/masch/goplaylist)
 [![codecov](https://codecov.io/gh/masch/goplaylist/branch/master/graph/badge.svg)](https://codecov.io/gh/masch/goplaylist)
+[![Github Releases Stats of goplaylist](https://img.shields.io/github/downloads/masch/goplaylist/total.svg?logo=github)](https://somsubhra.com/github-release-stats/?username=masch&repository=goplaylist)
 
-This is a GitHub repository template for Go. It has been created for ease-of-use for anyone who wants to:
-
-- quickly get into Go without losing too much time on environment setup,
-- create a new repoisitory with basic Continous Integration.
-
-It includes:
-
-- [Visual Studio Code](https://code.visualstudio.com) configuration with [Go](https://code.visualstudio.com/docs/languages/go) and [Remote Container](https://code.visualstudio.com/docs/remote/containers) support,
-- dependency management using [Go Modules](https://github.com/golang/go/wiki/Modules),
-- linting with [golangci-lint](https://github.com/golangci/golangci-lint),
-- build automation via [Make](https://www.gnu.org/software/make), [GitHub Actions](https://github.com/features/actions),
-- auto-tagging via [Github Tag Bump](https://github.com/marketplace/actions/github-tag-bump) GitHub Action,
-- releasing using [GoReleaser](https://github.com/goreleaser/goreleaser).
-
-`Star` this repository if you find it valuable and worth maintaining.
-
-`Watch` this repository to get notified about new releases, issues, etc.
+Command line application to list files from a directory path and resume from the last file used.
 
 ## Usage
 
-1. Click the `Use this template` button (alt. clone or download this repository).
-1. Replace all occurences of `github.com/masch/goplaylist` to `your_org/repo_name` in all files.
-1. Rename folder `cmd/seed` to `cmd/repo_name` and update [.goreleaser.yml](.goreleaser.yml).
-1. Update [LICENSE](LICENSE) and [README.md](README.md).
+`goplaylist` list files from a directory path and resume from the last file used. On every execution tracks the last file listened to resume after it on the next execution.
 
-## Build
+```
+Usage: goplaylist -path=/example_path -extension=.ext_1 -extension=.ext_2 -count=3 -short_mode=[name|timestamp_creation]
 
-- Terminal: `make` to get help for make targets.
-- Terminal: `make all` to execute a full build.
-- Visual Studio Code: `Terminal` → `Run Build Task... (CTRL+ALT+B)` to execute a fast build.
+  -path string
+        Specify path to load file list
+  -extension value
+        Specify file filter extension. Multiple extension are supported by adding severals -extension entry
+  -count int
+        Specify file count to load from path
+  -short_mode string
+        Specify sort ascendant mode to list the files: name or timestamp_creation are supported
+```
 
 ## Install
 
 In order to install:
 
 ```bash
-curl -sSfL https://raw.githubusercontent.com/masch/goplaylist/master/install.sh | sh -s -- -b /usr/local/bin
+curl -sSfL https://raw.githubusercontent.com/masch/goplaylist/master/install.sh | sh -s --
 ```
 
-## Release
+## Build
 
-The release workflow is triggered each time a tag with `v` prefix is pushed.
+- Terminal: `make` to get help for make targets.
+- Terminal: `make all` to execute a full build.
 
-This repo uses [Github Tag Bump](https://github.com/marketplace/actions/github-tag-bump) for auto tagging on master branch. It automatically triggers the release workflow.
+## Project template 
 
-- Add `#minor` to your commit message to bump minor version.
-- Add `#major` to your commit message to bump major version. DANGER! Use it with caution and make sure you understand the consequences. More info: [Go Wiki](https://github.com/golang/go/wiki/Modules#releasing-modules-v2-or-higher), [Go Blog][https://blog.golang.org/v2-go-modules].
-
-## Maintainance
-
-Remember to update Go version in [.github/workflows](.github/workflows), [Makefile](Makefile) and [devcontainer.json](.devcontainer/devcontainer.json).
-
-Notable files:
-- [devcontainer.json](.devcontainer/devcontainer.json) - Visual Studio Code Remote Container configuration
-- [.github/workflows](.github/workflows) - GitHub Actions workflows
-- [.vscode](.vscode) - Visual Studio Code configuration files
-- [.golangci.yml](.golangci.yml) - golangci-lint configuration
-- [.goreleaser.yml](.goreleaser.yml) - GoReleaser configuration
-- [Makefile](Makefile) - Make targets used for development, [CI build](.github/workflows) and [.vscode/tasks.json](.vscode/tasks.json)
-- [tools.go](tools.go) - build tools 
-
-## FAQ
-
-### Why Visual Studio Code editor configuration
-
-Developers that use Visual Studio Code can take advantage of the editor configuration. While others do not have to care about it. Setting configs for each repo is unnecessary time consuming. VS Code is the most popular Go editor ([survey](https://blog.golang.org/survey2019-results)) and it is officially [supported by the Go team](https://blog.golang.org/vscode-go). 
-
-You can always remove the [.devcontainer](.devcontainer) and [.vscode](.vscode) directories if it really does not help you.
-
-### Why GitHub Actions, not any other CI server
-
-GitHub Actions is out-of-the-box if you are already using GitHub.
-However, changing to any other CI server should be very simple, because this repository has build logic and tooling installation in Makefile. 
-
-You can also use the `docker` make target to run the build using a docker container.
-
-### How can I use Make on Windows
-
-Use [WSL (Windows Subsystem for Linux)](https://docs.microsoft.com/en-us/windows/wsl/install-win10) or try [Make Windows port](https://gist.github.com/evanwill/0207876c3243bbb6863e65ec5dc3f058).
-
-### How can I create a Docker image, deb/rpm/snap package, Homebrew Tap, Scoop App Manifest etc.
-
-Take a look at GoReleaser [docs](https://goreleaser.com/customization/) as well as [its repo](https://github.com/goreleaser/goreleaser/) how it is dogfooding its functionality.
-
-
-### How can I create an application installation script
-
-1. Install [GoDownloader](https://github.com/goreleaser/godownloader)
-1. Execute: 
-
-```bash
-godownloader --repo=your_org/repo_name > ./install.sh
-```
-
-3. Push `install.sh` to your repository.
-1. Add installation instructions to your `README.md` e.g.:
-
-```bash
-curl -sSfL https://raw.githubusercontent.com/your_org/repo_name/master/install.sh | sh -s -- -b /usr/local/bin
-```
-
-### How can I create a library instead of an application
-
-You can change the [.goreleaser.yml](.goreleaser.yml) to contain:
-
-```yaml
-build:
-  skip: true
-release:
-  github:
-  prerelease: auto
-```
-
-Alternativly you can completly remove the usage of GoReleaser if you prefer handcrafted release notes.
+Project based on [Golang template](https://github.com/golang-templates/seed).
 
 ## Contributing
 
