@@ -69,34 +69,41 @@ func writeOutput(fileList []string, writer writer) error {
 }
 
 // GetNextFilesFromPath get next files list from the command line using command line flags.
+// If there was an error parsing the flags arguments, it prints the usage documentation on stdout.
 func GetNextFilesFromPath(args []string, playlistClient playlister) ([]string, error) {
 	// parse flags values from command line
 	var extensions arrayFlags
 
-	setFlags := flag.NewFlagSet("goplaylist", flag.ContinueOnError)
-	sortModeRaw := setFlags.String("short_mode", "",
+	flags := flag.NewFlagSet("goplaylist", flag.ContinueOnError)
+	sortModeRaw := flags.String("sort_mode", "",
 		"Specify sort ascendant mode to list the files: name or timestamp_creation are supported")
-	path := setFlags.String("path", "", "Specify path to load file list")
-	countFiles := setFlags.Int("count", 0, "Specify file count to load from path")
-	setFlags.Var(&extensions, "extension", "Specify extensions")
+	path := flags.String("path", "", "Specify path to load file list")
+	countFiles := flags.Int("count", 0, "Specify file count to load from path")
+	flags.Var(&extensions, "extension",
+		"Specify file filter extension. Multiple extensions are supported by adding several -extension entry")
 
-	if err := setFlags.Parse(args); err != nil {
+	if err := flags.Parse(args); err != nil {
+		flags.Usage()
 		return nil, err
 	}
 
 	if *sortModeRaw == "" {
+		flags.Usage()
 		return nil, errSortModeIsEmpty
 	}
 
 	if *path == "" {
+		flags.Usage()
 		return nil, errPathOriginIsEmpty
 	}
 
 	if *countFiles == 0 {
+		flags.Usage()
 		return nil, errCountFilesIsEmpty
 	}
 
 	if extensions == nil {
+		flags.Usage()
 		return nil, errFilterExtensionsAreEmpty
 	}
 

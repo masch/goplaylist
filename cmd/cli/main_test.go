@@ -111,7 +111,7 @@ func TestRun(t *testing.T) { //nolint // function tool large because of BDD mech
 			suite: suite{
 				name: "FAIL_from_proxy",
 				input: input{
-					args: []string{"-short_mode", "name", "-path", "2", "-count", "1", "-extension", ".ext"},
+					args: []string{"-sort_mode", "name", "-path", "2", "-count", "1", "-extension", ".ext"},
 				},
 				expect: expect{
 					err: errProxy,
@@ -134,7 +134,7 @@ func TestRun(t *testing.T) { //nolint // function tool large because of BDD mech
 			suite: suite{
 				name: "FAIL_from_writer_writer_string_proxy",
 				input: input{
-					args: []string{"-short_mode", "name", "-path", "2", "-count", "1", "-extension", ".ext"},
+					args: []string{"-sort_mode", "name", "-path", "2", "-count", "1", "-extension", ".ext"},
 				},
 				expect: expect{
 					err: errProxy,
@@ -171,7 +171,7 @@ func TestRun(t *testing.T) { //nolint // function tool large because of BDD mech
 			suite: suite{
 				name: "OK_with_file_timestamp_creation_sort_mode",
 				input: input{
-					args: []string{"-short_mode", "timestamp_creation", "-path", "2", "-count", "1", "-extension", ".ext"},
+					args: []string{"-sort_mode", "timestamp_creation", "-path", "2", "-count", "1", "-extension", ".ext"},
 				},
 				expect: expect{
 					err: nil,
@@ -323,7 +323,7 @@ func TestGetNextFilesFromPath(t *testing.T) { //nolint // function tool large be
 			suite: suite{
 				name: "FAIL_Without_path_origin_argument",
 				input: input{
-					args: []string{"-short_mode", "1"},
+					args: []string{"-sort_mode", "1"},
 				},
 				expect: expect{
 					fileList: nil,
@@ -336,7 +336,7 @@ func TestGetNextFilesFromPath(t *testing.T) { //nolint // function tool large be
 			suite: suite{
 				name: "FAIL_Without_count_file_argument",
 				input: input{
-					args: []string{"-short_mode", "1", "-path", "2"},
+					args: []string{"-sort_mode", "1", "-path", "2"},
 				},
 				expect: expect{
 					fileList: nil,
@@ -349,7 +349,7 @@ func TestGetNextFilesFromPath(t *testing.T) { //nolint // function tool large be
 			suite: suite{
 				name: "FAIL_Without_filter_extension_argument",
 				input: input{
-					args: []string{"-short_mode", "1", "-path", "2", "-count", "1"},
+					args: []string{"-sort_mode", "1", "-path", "2", "-count", "1"},
 				},
 				expect: expect{
 					fileList: nil,
@@ -360,9 +360,9 @@ func TestGetNextFilesFromPath(t *testing.T) { //nolint // function tool large be
 		},
 		{
 			suite: suite{
-				name: "FAIL_With_unknown_short_mode_argument",
+				name: "FAIL_With_unknown_sort_mode_argument",
 				input: input{
-					args: []string{"-short_mode", "1", "-path", "2", "-count", "1", "-extension", ".ext"},
+					args: []string{"-sort_mode", "1", "-path", "2", "-count", "1", "-extension", ".ext"},
 				},
 				expect: expect{
 					fileList: nil,
@@ -375,7 +375,7 @@ func TestGetNextFilesFromPath(t *testing.T) { //nolint // function tool large be
 			suite: suite{
 				name: "FAIL_With_error_from_playlist_proxy",
 				input: input{
-					args: []string{"-short_mode", "name", "-path", "2", "-count", "1", "-extension", ".ext"},
+					args: []string{"-sort_mode", "name", "-path", "2", "-count", "1", "-extension", ".ext"},
 				},
 				expect: expect{
 					fileList: nil,
@@ -399,7 +399,7 @@ func TestGetNextFilesFromPath(t *testing.T) { //nolint // function tool large be
 			suite: suite{
 				name: "OK_with_file_name_sort_mode",
 				input: input{
-					args: []string{"-short_mode", "name", "-path", "2", "-count", "1", "-extension", ".ext"},
+					args: []string{"-sort_mode", "name", "-path", "2", "-count", "1", "-extension", ".ext"},
 				},
 				expect: expect{
 					fileList: []string{"file_1", "file_2", "file_3"},
@@ -423,7 +423,7 @@ func TestGetNextFilesFromPath(t *testing.T) { //nolint // function tool large be
 			suite: suite{
 				name: "OK_with_file_timestamp_creation_sort_mode",
 				input: input{
-					args: []string{"-short_mode", "timestamp_creation", "-path", "2", "-count", "1", "-extension", ".ext"},
+					args: []string{"-sort_mode", "timestamp_creation", "-path", "2", "-count", "1", "-extension", ".ext"},
 				},
 				expect: expect{
 					fileList: []string{"file_1", "file_2", "file_3"},

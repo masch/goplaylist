@@ -15,15 +15,15 @@ Command line application to list files from a directory path and resume from the
 `goplaylist` list files from a directory path and resume from the last file used. On every execution tracks the last file listened to resume after it on the next execution.
 
 ```
-Usage: goplaylist -path=/example_path -extension=.ext_1 -extension=.ext_2 -count=3 -short_mode=[name|timestamp_creation]
+Usage: goplaylist -path=/example_path -extension=.ext_1 -extension=.ext_2 -count=3 -sort_mode=[name|timestamp_creation]
 
   -path string
         Specify path to load file list
   -extension value
-        Specify file filter extension. Multiple extension are supported by adding severals -extension entry
+        Specify file filter extension. Multiple extensions are supported by adding several -extension entry
   -count int
         Specify file count to load from path
-  -short_mode string
+  -sort_mode string
         Specify sort ascendant mode to list the files: name or timestamp_creation are supported
 ```
 
