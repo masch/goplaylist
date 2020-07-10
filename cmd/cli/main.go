@@ -58,9 +58,12 @@ func run(args []string, playlistClient playlister, playlistOutput writer) error 
 	return writeOutput(fileList, playlistOutput)
 }
 
+// writeOutput prints on the writer given the file list given with a blank space between them.
+// It also surrounds each item with a double quote ("") in order to deal with a file name
+// that contain spaces under the command-line in GNU/Linux.
 func writeOutput(fileList []string, writer writer) error {
 	for _, file := range fileList {
-		if _, err := writer.WriteString(file + " "); err != nil {
+		if _, err := writer.WriteString(`"` + file + `" `); err != nil {
 			return err
 		}
 	}
