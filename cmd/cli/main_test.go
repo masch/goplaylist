@@ -156,7 +156,7 @@ func TestRun(t *testing.T) { //nolint // function tool large because of BDD mech
 				{
 					writeString: writerWriteString{
 						req: writerWriteStringReqProxy{
-							string: "file_1 ",
+							string: `"file_1" `,
 						},
 						res: writerWriteStringResProxy{
 							size: 0,
@@ -193,7 +193,7 @@ func TestRun(t *testing.T) { //nolint // function tool large because of BDD mech
 				{
 					writeString: writerWriteString{
 						req: writerWriteStringReqProxy{
-							string: "file_1 ",
+							string: `"file_1" `,
 						},
 						res: writerWriteStringResProxy{
 							size: 0,
@@ -210,7 +210,7 @@ func TestRun(t *testing.T) { //nolint // function tool large because of BDD mech
 				{
 					writeString: writerWriteString{
 						req: writerWriteStringReqProxy{
-							string: "file_2 ",
+							string: `"file_2" `,
 						},
 						res: writerWriteStringResProxy{
 							size: 0,
@@ -227,7 +227,7 @@ func TestRun(t *testing.T) { //nolint // function tool large because of BDD mech
 				{
 					writeString: writerWriteString{
 						req: writerWriteStringReqProxy{
-							string: "file_3 ",
+							string: `"file_3" `,
 						},
 						res: writerWriteStringResProxy{
 							size: 0,
@@ -402,7 +402,7 @@ func TestGetNextFilesFromPath(t *testing.T) { //nolint // function tool large be
 					args: []string{"-sort_mode", "name", "-path", "2", "-count", "1", "-extension", ".ext"},
 				},
 				expect: expect{
-					fileList: []string{"file_1", "file_2", "file_3"},
+					fileList: []string{"file 1", "file 2", "file_3"},
 					err:      nil,
 				},
 			},
@@ -414,7 +414,7 @@ func TestGetNextFilesFromPath(t *testing.T) { //nolint // function tool large be
 					sortMode:      playlist.FileSortModeFileNameAsc,
 				},
 				res: getNextFilesFromPathResProxy{
-					fileList: []string{"file_1", "file_2", "file_3"},
+					fileList: []string{"file 1", "file 2", "file_3"},
 					err:      nil,
 				},
 			},
