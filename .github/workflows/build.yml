@@ -30,7 +30,7 @@ jobs:
           name: coverage
           path: coverage.*
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1.0.10
+        uses: codecov/codecov-action@v1.0.12
         with:
           file: ./coverage.out
       - id: git-auto-tag
