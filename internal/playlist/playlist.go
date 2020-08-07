@@ -20,15 +20,15 @@ const (
 type FileSortMode uint
 
 const (
-	// FileSortModeFileNameAsc represents the file sort mode by file name ascendant
+	// FileSortModeFileNameAsc represents the file sort mode by file name ascendant.
 	FileSortModeFileNameAsc = iota
 
-	// FileSortModeTimestampCreationAsc represents the file sort mode by file timestamp creation ascendant
+	// FileSortModeTimestampCreationAsc represents the file sort mode by file timestamp creation ascendant.
 	FileSortModeTimestampCreationAsc
 )
 
 var (
-	// ErrUnsupportedFileSortMode represent the error when a file sort mode given is unknown
+	// ErrUnsupportedFileSortMode represent the error when a file sort mode given is unknown.
 	ErrUnsupportedFileSortMode = fmt.Errorf("unsupported file sort mode")
 )
 
