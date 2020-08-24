@@ -7,5 +7,5 @@ require (
 	github.com/goreleaser/goreleaser v0.140.1
 	github.com/stretchr/testify v1.6.1
 	golang.org/x/tools v0.0.0-20200724022722-7017fd6b1305
-	gopkg.in/ini.v1 v1.60.0
+	gopkg.in/ini.v1 v1.60.1
 )
