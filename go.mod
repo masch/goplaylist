@@ -3,9 +3,9 @@ module github.com/masch/goplaylist
 go 1.14
 
 require (
-	github.com/golangci/golangci-lint v1.30.0
-	github.com/goreleaser/goreleaser v0.143.0
-	github.com/stretchr/testify v1.6.1
-	golang.org/x/tools v0.0.0-20200724022722-7017fd6b1305
-	gopkg.in/ini.v1 v1.61.0
+	github.com/golangci/golangci-lint v1.36.0
+	github.com/goreleaser/goreleaser v0.157.0
+	github.com/stretchr/testify v1.7.0
+	golang.org/x/tools v0.0.0-20210105210202-9ed45478a130
+	gopkg.in/ini.v1 v1.62.0
 )
